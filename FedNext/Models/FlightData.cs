@@ -41,5 +41,12 @@ namespace FedNext
             ArrivalTime = arrivalTime;
 
         }
+        public override string ToString()
+        {
+            string returnString = "\nCarrier: " + FlightCompany + "\n" + "Flight Number: " + FlightNumber + "\n" + "Type: " + FlightClass + "\n" +
+                "Cargo Capacity: " + PlaneCapacity + "\n" + "Departure Date, Airport, and Time: " + DepartureDate + " " + DepartingAirport + " " + DepartureTime + "\n" +
+                "Arriving Date, Airport, and Time: " + ArrivalDate + " " + ArrivalAirport + " " + ArrivalTime + "\n";
+                return returnString;
+        }
     }
 }

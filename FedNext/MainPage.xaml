@@ -20,7 +20,7 @@
                     <ComboBox x:Name="cbBox_State" Canvas.Left="136"  PlaceholderText="State" Canvas.Top="239" Height="39" Width="83" />
                     <TextBox x:Name="txbox_Zip" Canvas.Left="224" TextWrapping="Wrap" PlaceholderText="Zip" Canvas.Top="239" Width="165" Height="39" MaxLength="5"/>
                     <TextBox x:Name="txtBox_TelephonNumber" Header="Phone Number" PlaceholderText="801222222" Canvas.Left="10" TextWrapping="Wrap"  Canvas.Top="283" Width="379"/>
-                    <Button x:Name="btn_AddCustomer" Content="Add" Canvas.Left="430" Canvas.Top="324" RenderTransformOrigin="-0.104,-0.164" Width="158" Click="Btn_AddCustomer_OnClick" />
+                    <Button x:Name="btn_AddCustomer" Content="Add Customer" Canvas.Left="430" Canvas.Top="324" RenderTransformOrigin="-0.104,-0.164" Width="158" Click="Btn_AddCustomer_OnClick" />
                     <Button x:Name="btn_Clear" Content= "Clear" Canvas.Left="637" Canvas.Top="324" Width="158" Click="Btn_Clear_OnClick"/>
                 </Canvas>
             </PivotItem>
@@ -48,10 +48,12 @@
                     <DatePicker x:Name="date_arriving" Header="Arriving Date:" Canvas.Left="266" Canvas.Top="140"/>
                     <ComboBox x:Name="combo_aAirport" Header="Airport" Canvas.Left="567" Canvas.Top="140" Width="120"/>
                     <TimePicker x:Name="time_arriving" Header="Arrival Time:" Canvas.Left="315" Canvas.Top="205"/>
+                    <Button x:Name="btn_AddFlight" Content="Add Flight" Canvas.Left="562" Canvas.Top="328" Width="185" Click="btn_AddFlight_Click"/>
                 </Canvas>
             </PivotItem>
             <PivotItem Header="Find/Edit Flights">
                 <Canvas>
+                    <TextBlock x:Name="resultTxbl" Canvas.Left="10" TextWrapping="Wrap"  Canvas.Top="63" Height="953" Width="805"/>
 
                 </Canvas>
             </PivotItem>

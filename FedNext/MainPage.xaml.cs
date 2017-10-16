@@ -8,6 +8,7 @@
  */
 
 using System;
+using Windows.UI.Popups;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -26,6 +27,7 @@ namespace FedNext
     public sealed partial class MainPage : Page
     {
         private List<CustomerData> customerlist;
+        private List<FlightData> flightlist =new List<FlightData>();
         private static int lastCustomerID;
         public MainPage()
         {
@@ -91,8 +93,9 @@ namespace FedNext
 
         }
 
-        private void Btn_AddCustomer_OnClick(object sender, RoutedEventArgs e)
+        private async void Btn_AddCustomer_OnClick(object sender, RoutedEventArgs e)
         {
+
             int customerID = lastCustomerID;
             txbox_CusId.Text = customerID.ToString();
             string Name = txbox_CusName.Text;
@@ -101,6 +104,7 @@ namespace FedNext
             string state = cbBox_State.SelectedItem.ToString();
             String zip = txbox_Zip.Text;
             string telephoneNumber = txtBox_TelephonNumber.Text;
+            var messageDialog = new MessageDialog("Customer " + Name + " added sucessfully.");
 
             if (!validateNames(Name))
             {
@@ -127,6 +131,7 @@ namespace FedNext
                 addedCustomers += (cust.ToString() + "\n");
             }
             displayTxtBlk.Text = addedCustomers;
+            await messageDialog.ShowAsync();
             lastCustomerID++;
             clearForm();
         }
@@ -218,6 +223,37 @@ namespace FedNext
             cbBox_State.SelectedIndex = -1;
             txbox_Zip.Text = "";
             txtBox_TelephonNumber.Text = "";
+
+        }
+
+        private async void btn_AddFlight_Click(object sender, RoutedEventArgs e)
+        {
+            String carrier = txbx_flightcarrier.Text;
+            int flightNumber = int.Parse(txbx_flightnum.Text);
+            string planeClass = txbx_planetype.Text;
+            int capacity = int.Parse(txtbx_planesize.Text);
+            string departureDate = date_departing.ToString();    //Need to figure how to convert the date back to a string
+            string departingAirport = combo_dAirport.ToString();
+            String departureTime = time_departing.ToString();   // Need to figure how to conver the time back to a sting
+            string arrivalDate = date_arriving.ToString();    //Need to figure how to convert the date back to a string
+            string arrivalAirport = combo_aAirport.ToString();
+            string arrivalTime = time_arriving.ToString();  //Need to figure how to convert the time to the correct format
+            var messageDialog = new MessageDialog("Cargo Plane " + carrier + " " + flightNumber + " added sucessfully.");
+
+            FlightData cargoPlane;
+            cargoPlane = new FlightData(carrier, flightNumber, planeClass, capacity, departureDate, departingAirport, departureTime, arrivalDate, arrivalAirport, arrivalTime);
+            flightlist.Add(cargoPlane);
+
+            string addedFlights = "";
+
+            //print the list
+            foreach (FlightData cust in flightlist)
+            {
+                addedFlights += (cust.ToString() + "\n");
+            }
+            resultTxbl.Text = addedFlights;
+            await messageDialog.ShowAsync();
+
 
         }
     }
