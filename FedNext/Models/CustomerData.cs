@@ -7,13 +7,12 @@
  * Instrutor: Dan Masterson
  */
 using System;
-
+using System.ComponentModel;
 
 namespace FedNext
 {
     class CustomerData
     {
-
         //Member properties
         public int CustomerId { get; set; }
         public String Name { get; set; }
@@ -23,12 +22,9 @@ namespace FedNext
         public String ZipCode { get; set; }
         public String State { get; set; }
 
-
-
         //constructor
         public CustomerData(int id, String name, String street, String city, String state, String zipCode, String phone)
         {
-
             CustomerId = id;
             Name = name;
             Street = street;
@@ -36,10 +32,7 @@ namespace FedNext
             ZipCode = zipCode;
             State = state;
             PhoneNum = phone;
-
         }
-
-
 
         public override string ToString()
         {
@@ -47,7 +40,5 @@ namespace FedNext
                                   " " + ZipCode + "\n" + "Contact: " + PhoneNum + "\n";
             return returnString;
         }
-
-
     }
 }

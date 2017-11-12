@@ -7,6 +7,7 @@
  * Instructor: Dan Masterson
  */
 using System;
+using System.ComponentModel;
 
 namespace FedNext
 {
@@ -24,8 +25,6 @@ namespace FedNext
         public String ArrivalAirport { get; set; }
         public String ArrivalTime { get; set; }
 
-
-
         //Constructor
         public FlightData(String carrier, int flightNumber, String planeClass, int capacity, String departureDate, String departingAirport, String departureTime, String arrivalDate, String arrivalAirport, String arrivalTime)
         {
@@ -39,7 +38,6 @@ namespace FedNext
             ArrivalDate = arrivalDate;
             ArrivalAirport = arrivalAirport;
             ArrivalTime = arrivalTime;
-
         }
         public override string ToString()
         {

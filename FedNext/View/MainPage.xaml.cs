@@ -14,7 +14,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-
+using VMLibrary;
 
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -26,13 +26,15 @@ namespace FedNext
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private List<CustomerData> customerlist;
-        private List<FlightData> flightlist =new List<FlightData>();
+        ObservableCollection<CustomerData> customerList = new ObservableCollection<CustomerData>();
+        ObservableCollection<FlightData> flightList = new ObservableCollection<FlightData>();
+        private List<FlightData> flightlist = new List<FlightData>();
         private static int lastCustomerID;
+
         public MainPage()
         {
-            InitializeComponent();
-
+            this.InitializeComponent();
+            this.DataContext = new MainWindowViewModel();
             ObservableCollection<string> States = new ObservableCollection<string>
             {
                 "AL",
@@ -87,15 +89,11 @@ namespace FedNext
                 "WY"
             };
             cbBox_State.ItemsSource = States;
-
-            customerlist = new List<CustomerData>();
             lastCustomerID = 0001;
-
         }
 
         private async void Btn_AddCustomer_OnClick(object sender, RoutedEventArgs e)
         {
-
             int customerID = lastCustomerID;
             txbox_CusId.Text = customerID.ToString();
             string Name = txbox_CusName.Text;
@@ -109,7 +107,6 @@ namespace FedNext
             if (!validateNames(Name))
             {
                 txbox_CusName.Text = "Invalid Name";
-
                 return;
             }
 
@@ -118,19 +115,18 @@ namespace FedNext
                 txbox_Zip.Text = "Invalid Zip";
                 return;
             }
-
+            //Add customer to the ListBox customerList
             CustomerData customer;
             customer = new CustomerData(customerID, Name, address, city, state, zip, telephoneNumber);
-            customerlist.Add(customer);
+            customerList.Add(customer);
 
             string addedCustomers = "";
 
             //print the list
-            foreach (CustomerData cust in customerlist)
+            foreach (CustomerData cust in customerList)
             {
                 addedCustomers += (cust.ToString() + "\n");
             }
-            displayTxtBlk.Text = addedCustomers;
             await messageDialog.ShowAsync();
             lastCustomerID++;
             clearForm();
@@ -138,7 +134,6 @@ namespace FedNext
 
         private void Btn_Clear_OnClick(object sender, RoutedEventArgs e)
         {
-
             txbox_CusId.Text = "Auto Generated";
             txbox_CusName.Text = "";
             txbox_Add1.Text = "";
@@ -147,7 +142,6 @@ namespace FedNext
             cbBox_State.SelectedIndex = -1;
             txbox_Zip.Text = "";
             txtBox_TelephonNumber.Text = "";
-
         }
         private void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
@@ -165,8 +159,6 @@ namespace FedNext
                 {
                     sender.ItemsSource = new String[] { "No result" };
                 }
-
-
             }
         }
 
@@ -174,7 +166,6 @@ namespace FedNext
         {
             // Set sender.Text. You can use args.SelectedItem to build your text string.
         }
-
 
         private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
@@ -223,8 +214,16 @@ namespace FedNext
             cbBox_State.SelectedIndex = -1;
             txbox_Zip.Text = "";
             txtBox_TelephonNumber.Text = "";
-
         }
+        private void btn_Remove_Click(object sender, RoutedEventArgs e)
+        {
+            while (displayTxtBlk.SelectedItems.Count > 0)
+            {
+                customerList.Remove((CustomerData)displayTxtBlk.SelectedItem);
+                lastCustomerID--;
+            }
+        }
+/********************************************** Cargo Flight ******************************************************************/
 
         private async void btn_AddFlight_Click(object sender, RoutedEventArgs e)
         {
@@ -232,29 +231,36 @@ namespace FedNext
             int flightNumber = int.Parse(txbx_flightnum.Text);
             string planeClass = txbx_planetype.Text;
             int capacity = int.Parse(txtbx_planesize.Text);
-            string departureDate = date_departing.ToString();    //Need to figure how to convert the date back to a string
+            string departureDate = date_departing.Date.ToString("M/d/yyyy");
             string departingAirport = combo_dAirport.ToString();
-            String departureTime = time_departing.ToString();   // Need to figure how to conver the time back to a sting
-            string arrivalDate = date_arriving.ToString();    //Need to figure how to convert the date back to a string
+            String departureTime = time_departing.Time.ToString();  //24 hr time 
+            string arrivalDate = date_arriving.Date.ToString("M/d/yyyy");
             string arrivalAirport = combo_aAirport.ToString();
-            string arrivalTime = time_arriving.ToString();  //Need to figure how to convert the time to the correct format
+            string arrivalTime = time_arriving.Time.ToString();   //24hr time
             var messageDialog = new MessageDialog("Cargo Plane " + carrier + " " + flightNumber + " added sucessfully.");
 
             FlightData cargoPlane;
             cargoPlane = new FlightData(carrier, flightNumber, planeClass, capacity, departureDate, departingAirport, departureTime, arrivalDate, arrivalAirport, arrivalTime);
-            flightlist.Add(cargoPlane);
+            flightList.Add(cargoPlane);
 
             string addedFlights = "";
 
             //print the list
-            foreach (FlightData cust in flightlist)
+            foreach (FlightData cust in flightList)
             {
                 addedFlights += (cust.ToString() + "\n");
             }
-            resultTxbl.Text = addedFlights;
             await messageDialog.ShowAsync();
 
+        }
 
+        private void btn_FlighRemove_Click(object sender, RoutedEventArgs e)
+        {
+            while (resultTxtBlk.SelectedItems.Count > 0)
+            {
+                flightList.Remove((FlightData)resultTxtBlk.SelectedItem);
+              
+            }
         }
     }
 }
